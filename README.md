@@ -11,10 +11,7 @@ Fase	Atividade Realizada	Objetivo de Aprendizado
 6. Estabilização do Ingress	Diagnóstico e resolução do problema de conexão (TIME_OUT) causado pela falta do Ingress Controller.	Aprender a identificar a dependência do Ingress Controller e resolver problemas de roteamento.
 
 # Tipos de Services (Serviços) Utilizados
-No decorrer do treinamento, exploramos e corrigimos três tipos diferentes de Services, fundamentais para expor a aplicação:
+- No decorrer do treinamento, exploramos e corrigimos três tipos diferentes de Services, fundamentais para expor a aplicação:
+<img width="627" height="405" alt="image" src="https://github.com/user-attachments/assets/5c6e6eed-1f0f-440d-8113-830103825c93" />
 
-Tipo de Service	Finalidade	Como Foi Usado	Status Final
-NodePort	Expõe o Service em uma porta estática (NodePort) em cada nó do cluster. É o mais comum para Minikube.	Foi o tipo de Service inicial. Acesso via http://<minikube-ip>:30007.	Funcional, mas substituído para testar LoadBalancer.
-LoadBalancer	Expõe o Service externamente usando um Load Balancer da nuvem (ou um simulador, como o minikube tunnel).	Foi usado em uma fase de teste. No Minikube, necessita do comando minikube tunnel para funcionar (sem ele, fica em Pending).	Gerou problemas de Pending/Time Out e foi substituído.
-ClusterIP	Expõe o Service apenas internamente no cluster, usando um IP virtual. É o tipo ideal para ser usado como backend de um Ingress.	Foi a solução final e correta para a arquitetura com Ingress. O Ingress Controller usa o IP interno deste Service para rotear o tráfego externo.	Finalizado. A arquitetura final Ingress usou este tipo.
 
