@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: conversao-distancia-service
+spec:
+  # O Minikube funciona melhor com NodePort para acesso externo
+  type: ClusterIP # LoadBalancer / NodePort
+  selector:
+    # Este label DEVE ser o mesmo label 'app' definido no seu Deployment
+    app: conversao-distancia 
+  ports:
+    # A porta do Service (porta interna do cluster)
+    - port: 80 # Você pode manter 80 aqui para facilitar o acesso (http://IP:PORTA), mas pode ser 5000 também.
+      # A porta que o container está escutando (DEVE ser 5000)
+      targetPort: 5000
+      # NodePort é a porta que o minikube abre externamente. Deixei a porta 30007.
+      nodePort: 30007

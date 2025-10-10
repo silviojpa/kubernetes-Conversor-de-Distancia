@@ -1,0 +1,29 @@
+### Kubernetes
+# Ignora arquivos de kubeconfig (se não estiverem em um local padrão)
+kubeconfig
+
+### Build e Cache Python
+# Arquivos de cache compilados (.pyc)
+__pycache__/
+
+# Módulos Python virtuais
+venv/
+.venv/
+env/
+
+### Dados do Minikube / Docker
+# Ignora o certificado do Docker (evita exposição de chaves)
+.docker/
+.minikube/
+
+# Arquivos de log e cache da aplicação
+*.log
+*.tmp
+temp/
+
+### IDEs (Opcional, mas recomendado)
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/

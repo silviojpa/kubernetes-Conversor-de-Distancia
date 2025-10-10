@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: conversao-distancia-ingress
+  annotations:
+    # Esta anotação é útil para o Ingress Controller do Minikube
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: conversor.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: conversao-distancia-service # Seu Service
+            port:
+              number: 80 # A porta que o Service expõe
