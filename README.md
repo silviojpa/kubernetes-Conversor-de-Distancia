@@ -1,5 +1,5 @@
 # Passo a Passo das Atividades em Kubernetes (Minikube)
-# O ciclo de trabalho focou em praticar o gerenciamento do ciclo de vida da aplicação (silvio69luiz/conversao-distancia) no Kubernetes, utilizando os principais componentes de Deployment, Scaling, Service, Rolling Update, Rollback e Ingress.
+- O ciclo de trabalho focou em praticar o gerenciamento do ciclo de vida da aplicação (silvio69luiz/conversao-distancia) no Kubernetes, utilizando os principais componentes de Deployment, Scaling, Service, Rolling Update, Rollback e Ingress.
 
 Fase	Atividade Realizada	Objetivo de Aprendizado
 0. Deploy Inicial	Criação inicial do Deployment com 3 réplicas e o Service (inicialmente NodePort).	Expor a aplicação (que roda na porta 5000) e garantir o funcionamento básico.
