@@ -1,0 +1,50 @@
+🏗️ Roteiro Técnico: Do Erro ao Cluster Kubernetes Profissional
+1. Recuperação do Ambiente (Disaster Recovery)
+Problema: docker system prune removeu o container do nó do Minikube, corrompendo o cluster.
+
+Solução: * minikube delete: Para limpar os certificados e configurações órfãs.
+
+minikube start: Para criar um novo nó de controle do zero dentro do Docker.
+
+2. Preparação da Infraestrutura
+Ativação do Ingress: O Minikube não vem com o controlador de Ingress ativo por padrão.
+
+minikube addons enable ingress: Necessário para interpretar as regras de domínio (conversor.local).
+
+3. Deploy da Aplicação (O Coração do K8s)
+Aplicamos os três manifestos YAML fundamentais:
+
+Deployment: Define o estado desejado (imagem silvio69luiz/conversao-distancia:v2 e 3 réplicas).
+
+Service (ClusterIP): Cria um IP interno estável para que os pods sejam encontrados.
+
+Ingress: Define a regra de roteamento externa (Host: conversor.local -> porta 80).
+
+4. Configuração de Rede e Acesso (Networking)
+Este é o ponto onde a maioria das pessoas trava, e nós resolvemos em duas frentes:
+
+No WSL/Linux: Editamos o /etc/hosts para o comando curl funcionar internamente.
+
+No Windows (Host): Editamos o arquivo em C:\Windows\System32\drivers\etc\hosts apontando 127.0.0.1 para conversor.local.
+
+O Túnel: Executamos o minikube tunnel para criar a ponte de rede entre o Windows e o cluster isolado no Docker.
+
+5. Testes de Resiliência e Operação (O que mostrar no vídeo)
+Realizamos as operações que provam o valor do Kubernetes:
+
+Esconamento (Scaling): Alteramos o número de pods em tempo real com kubectl scale.
+
+Rollback de Erro: * Simulamos um deploy com erro (imagem inexistente v999).
+
+Observamos o status ImagePullBackOff.
+
+Usamos kubectl rollout undo para voltar instantaneamente para a versão estável sem tirar o site do ar.
+
+Auto-Cura (Self-Healing): Deletamos pods manualmente e vimos o Kubernetes recriá-los em segundos.
+
+💡 Dicas para o seu vídeo:
+Mostre o Load Balancer: No rodapé da sua página, aparece o nome do Pod. Dê F5 várias vezes para mostrar o nome mudando. Isso prova que o tráfego está sendo distribuído entre os pods.
+
+Use o modo -w: Sempre que rodar kubectl get pods -w, explique que o -w (watch) permite ver as mudanças de estado em tempo real (como o nascimento e morte de containers).
+
+Terminal vs Navegador: Mostre o minikube tunnel rodando em um terminal separado. Explique que sem ele, o navegador do Windows não "enxerga" o que está dentro do Docker Desktop.
