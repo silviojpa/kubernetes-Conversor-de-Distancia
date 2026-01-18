@@ -81,3 +81,16 @@ Mostre o Load Balancer: No rodapé da sua página, aparece o nome do Pod. Dê F5
 Use o modo -w: Sempre que rodar kubectl get pods -w, explique que o -w (watch) permite ver as mudanças de estado em tempo real (como o nascimento e morte de containers).
 
 Terminal vs Navegador: Mostre o minikube tunnel rodando em um terminal separado. Explique que sem ele, o navegador do Windows não "enxerga" o que está dentro do Docker Desktop.
+
+FINALIZAR OS SERVIÇOS
+1. Deletar os Recursos do Kubernetes
+Em vez de deletar arquivo por arquivo, você pode deletar tudo o que foi criado pelos seus manifestos de uma vez:
+kubectl delete -f deployment.yaml
+kubectl delete -f service.yaml
+kubectl delete -f ingress.yaml
+
+2. Desativar o Túnel e Addons
+Vá ao terminal onde o minikube tunnel está rodando e dê um Ctrl + C.
+- minikube addons disable ingress (opcional)
+
+Se quiser desativar o controlador de Ingress (opcional):
