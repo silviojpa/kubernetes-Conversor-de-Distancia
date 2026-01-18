@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conversao-distancia-deployment
+  labels:
+    app: conversao-distancia
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: conversao-distancia
+  template:
+    metadata:
+      labels:
+        app: conversao-distancia
+    spec:
+      containers:
+      - name: conversao-distancia-container
+        image: silvio69luiz/conversao-distancia:v2
+        imagePullPolicy: IfNotPresent 
+        ports:
+        # A porta que sua aplicação (gunicorn) está escutando DENTRO do container
+        - containerPort: 5000
