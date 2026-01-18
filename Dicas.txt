@@ -5,22 +5,23 @@ Problema: docker system prune removeu o container do nó do Minikube, corrompend
 Solução: * minikube delete: Para limpar os certificados e configurações órfãs.
 
 minikube start: Para criar um novo nó de controle do zero dentro do Docker.
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
-kubectl apply -f ingress.yaml
 
 2. Preparação da Infraestrutura
 Ativação do Ingress: O Minikube não vem com o controlador de Ingress ativo por padrão.
-Pegue o IP: 
-- minikube ip
+
 - minikube addons enable ingress: Necessário para interpretar as regras de domínio (conversor.local).
 
 3. Deploy da Aplicação (O Coração do K8s)
 Aplicamos os três manifestos YAML fundamentais:
 
 Deployment: Define o estado desejado (imagem silvio69luiz/conversao-distancia:v2 e 3 réplicas).
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f ingress.yaml
 
 Service (ClusterIP): Cria um IP interno estável para que os pods sejam encontrados.
+Pegue o IP: 
+- minikube ip
 
 Ingress: Define a regra de roteamento externa (Host: conversor.local -> porta 80).
 
