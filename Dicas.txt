@@ -5,11 +5,15 @@ Problema: docker system prune removeu o container do nó do Minikube, corrompend
 Solução: * minikube delete: Para limpar os certificados e configurações órfãs.
 
 minikube start: Para criar um novo nó de controle do zero dentro do Docker.
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f ingress.yaml
 
 2. Preparação da Infraestrutura
 Ativação do Ingress: O Minikube não vem com o controlador de Ingress ativo por padrão.
-
-minikube addons enable ingress: Necessário para interpretar as regras de domínio (conversor.local).
+Pegue o IP: 
+- minikube ip
+- minikube addons enable ingress: Necessário para interpretar as regras de domínio (conversor.local).
 
 3. Deploy da Aplicação (O Coração do K8s)
 Aplicamos os três manifestos YAML fundamentais:
@@ -24,23 +28,48 @@ Ingress: Define a regra de roteamento externa (Host: conversor.local -> porta 80
 Este é o ponto onde a maioria das pessoas trava, e nós resolvemos em duas frentes:
 
 No WSL/Linux: Editamos o /etc/hosts para o comando curl funcionar internamente.
+curl -v http://conversor.local
 
 No Windows (Host): Editamos o arquivo em C:\Windows\System32\drivers\etc\hosts apontando 127.0.0.1 para conversor.local.
+127.0.0.1 conversor.local
 
 O Túnel: Executamos o minikube tunnel para criar a ponte de rede entre o Windows e o cluster isolado no Docker.
 
 5. Testes de Resiliência e Operação (O que mostrar no vídeo)
 Realizamos as operações que provam o valor do Kubernetes:
+O que você consolidou com esse sucesso:
+
+Resiliência: Seus 3 Pods estão ativos. Se um falhar, o Kubernetes criará outro automaticamente.
+Abstração de Rede: O tráfego flui do seu navegador (Windows) -> Arquivo Hosts -> minikube tunnel -> Ingress Controller -> Service -> Pod.
+Interface Gráfica: A aplicação Python/Flask está renderizando o front-end corretamente com Bootstrap.
 
 Esconamento (Scaling): Alteramos o número de pods em tempo real com kubectl scale.
+- kubectl scale deployment conversao-distancia-deployment --replicas=5
 
 Rollback de Erro: * Simulamos um deploy com erro (imagem inexistente v999).
+. O Teste de Auto-Cura (Self-Healing)
 
+O Kubernetes é famoso por ser "imortal". Vamos provar isso.
+O Desafio: Tente matar a sua aplicação e veja quanto tempo o Kubernetes leva para perceber e corrigir.
+Como fazer:
+1-Fique monitorando os pods: kubectl get pods -w
+2-Em outro terminal, delete todos os pods de uma vez: 
+- kubectl delete pods -l app=conversao-distancia
 Observamos o status ImagePullBackOff.
 
 Usamos kubectl rollout undo para voltar instantaneamente para a versão estável sem tirar o site do ar.
+O Desafio: Atualizar a aplicação para uma versão que não existe e depois "voltar no tempo".
+Como fazer:
+Atualize para uma imagem inexistente: 
+- kubectl set image deployment/conversao-distancia-deployment conversao-distancia-container=silvio69luiz/conversao-distancia:v99
+Veja o erro: 
+- kubectl get pods (vai aparecer ImagePullBackOff).
+O Desgate: Desfaça a burrada com um único comando: 
+- kubectl rollout undo deployment/conversao-distancia-deployment
+Confira se os pods voltaram a ficar Running na versão anterior.
 
 Auto-Cura (Self-Healing): Deletamos pods manualmente e vimos o Kubernetes recriá-los em segundos.
+- kubectl exec <NOME_DO_POD> -- kill 1
 
 💡 Dicas para o seu vídeo:
 Mostre o Load Balancer: No rodapé da sua página, aparece o nome do Pod. Dê F5 várias vezes para mostrar o nome mudando. Isso prova que o tráfego está sendo distribuído entre os pods.
